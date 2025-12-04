@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from collections import Counter
 
 class GlobalRandomSearch:
-    def __init__(self, target_func, max_it, epsilon, lim_inf=-100, lim_sup=100, opt='min'):
+    def __init__(self, target_func, max_it, lim_inf=-100, lim_sup=100, opt='min'):
         self.target_func = target_func  
         self.max_it = max_it
         self.opt = opt
-        self.epsilon = epsilon
         
         # --- CORREÇÃO DE DIMENSIONALIDADE ---
         self.lim_inf = np.array(lim_inf)
@@ -54,11 +54,13 @@ class GlobalRandomSearch:
         )
         self.path_line.set_data(P[:,0], P[:,1])
         self.path_line.set_3d_properties(P[:,2])
-        plt.pause(0.05)
+        # plt.pause(0.05)
         
     def perturb(self):
         # Usa os limites vetoriais
-        return np.random.uniform(self.lim_inf, self.lim_sup)
+        x_cand = np.random.uniform(self.lim_inf, self.lim_sup)
+        x_cand = np.clip(x_cand, self.lim_inf, self.lim_sup)
+        return x_cand
     
     def search(self):
         it = 0
@@ -71,14 +73,14 @@ class GlobalRandomSearch:
                 if f_cand < self.f_opt:
                     self.x_opt = x_cand
                     self.f_opt = f_cand
-                    plt.pause(.05) 
+                    # plt.pause(.05) 
                     self.path.append(np.array([self.x_opt[0], self.x_opt[1], self.f_opt]))
                     self.update_plot()
             else:
                 if f_cand > self.f_opt:
                     self.x_opt = x_cand
                     self.f_opt = f_cand
-                    plt.pause(.05) 
+                    # plt.pause(.05) 
                     self.path.append(np.array([self.x_opt[0], self.x_opt[1], self.f_opt]))
                     self.update_plot()
                 
@@ -86,7 +88,11 @@ class GlobalRandomSearch:
             
         plt.figure()
         plt.title(f"Convergência do GRS ({self.opt})")
-        plt.plot(self.historico); plt.xlabel("Iterações"); plt.ylabel("f(x_best)"); plt.grid(); plt.show()
+        plt.plot(self.historico); plt.xlabel("Iterações"); plt.ylabel("f(x_best)"); plt.grid(); 
+        # plt.show()
+        plt.close(self.fig)  # FECHA FIGURA 3D
+        plt.close()          # FECHA FIGURA DO GRÁFICO
+        return self.f_opt
 
 
 class LocalRandomSearch:
@@ -144,7 +150,7 @@ class LocalRandomSearch:
         )
         self.path_line.set_data(P[:,0], P[:,1])
         self.path_line.set_3d_properties(P[:,2])
-        plt.pause(0.05)
+        # plt.pause(0.05)
     
     def perturb(self):
         # Usa o shape de x_opt para definir o tamanho do ruído
@@ -163,14 +169,14 @@ class LocalRandomSearch:
                 if f_cand < self.f_opt:
                     self.x_opt = x_cand
                     self.f_opt = f_cand
-                    plt.pause(.05)
+                    # plt.pause(.05)
                     self.path.append(np.array([self.x_opt[0], self.x_opt[1], self.f_opt]))
                     self.update_plot()
             else:
                 if f_cand > self.f_opt:
                     self.x_opt = x_cand
                     self.f_opt = f_cand
-                    plt.pause(.05)
+                    # plt.pause(.05)
                     self.path.append(np.array([self.x_opt[0], self.x_opt[1], self.f_opt]))
                     self.update_plot()
             
@@ -179,4 +185,8 @@ class LocalRandomSearch:
             
         plt.figure()
         plt.title(f"Convergência do LRS ({self.opt})")
-        plt.plot(self.historico); plt.xlabel("Iterações"); plt.ylabel("f(x_best)"); plt.grid(); plt.show()
+        plt.plot(self.historico); plt.xlabel("Iterações"); plt.ylabel("f(x_best)"); plt.grid(); 
+        plt.show()
+        plt.close(self.fig)  # FECHA FIGURA 3D
+        plt.close()          # FECHA FIGURA DO GRÁFICO
+        return self.f_opt

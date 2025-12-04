@@ -15,15 +15,16 @@ def f(x):
     
     return termo1 + termo2 + termo3
 
+L_INF = -8
+L_SUP = 8
 
-
-# grs = GlobalRandomSearch(target_func=f, max_it=500, epsilon=0.5, lim_inf=-8, lim_sup=8)
+# grs = GlobalRandomSearch(target_func=f, max_it=500, epsilon=0.5, lim_inf=L_INF, lim_sup=L_SUP)
 # grs.search()
 
 
-# lrs = LocalRandomSearch(target_func=f, max_it=500, sigma=0.8, lim_inf=-8, lim_sup=8)
+# lrs = LocalRandomSearch(target_func=f, max_it=500, sigma=0.8, lim_inf=L_INF, lim_sup=L_SUP)
 # lrs.search() 
 
 
-hill = Hill(target_func=f, max_it=100, sigma=0.999999999, max_vizinhos=50, lim_inf=-8, lim_sup=8, opt='min')
+hill = Hill(target_func=f, max_it=100, sigma=0.999999999, max_vizinhos=50, lim_inf=L_INF, lim_sup=L_SUP)
 hill.search()

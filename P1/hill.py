@@ -74,7 +74,7 @@ class Hill:
         )
         self.path_line.set_data(P[:,0], P[:,1])
         self.path_line.set_3d_properties(P[:,2])
-        plt.pause(0.01) 
+        # plt.pause(0.01) 
 
     def perturb(self):
         low_bound = self.x_opt - self.sigma
@@ -117,6 +117,7 @@ class Hill:
             
             self.historico.append(self.f_opt)
             it += 1
+        
             
         plt.figure()
         plt.title(f"Convergência do Hill ({self.opt})")
@@ -124,4 +125,7 @@ class Hill:
         plt.xlabel("Iterações (Moves)")
         plt.ylabel("f(x_best)")
         plt.grid()
-        plt.show()
+        # plt.show()
+        plt.close(self.fig)  # FECHA FIGURA 3D
+        plt.close()          # FECHA FIGURA DO GRÁFICO
+        return self.f_opt

@@ -5,7 +5,7 @@ import time
 
 print(">>> Iniciando busca única com visualização...")
 # Item 2: Definição da temperatura inicial (ex: 10.0) e decaimento (0.99)
-sa = SimulatedAnnealingTempura(max_it=1000, T_inicial=10.0, cooling_rate=0.99)
+sa = SimulatedAnnealingTempura(max_it=1000, T_inicial=100_000, cooling_rate=0.98)
 solucao, conflitos = sa.search()
 
 print(f"Busca finalizada. Conflitos: {conflitos}")
@@ -31,9 +31,9 @@ if resp.lower() == 's':
         # --- Lógica Rápida ("Headless") ---
         board = np.random.permutation(8)
         cost = sa.calculate_attacks(board)
-        temp = 10.0
+        temp = 100_000
         
-        for _ in range(1000): # max it
+        for _ in range(1000): 
             if cost == 0: break
             
             # Perturb
@@ -47,7 +47,7 @@ if resp.lower() == 's':
                 board = new_board
                 cost = new_cost
             
-            temp *= 0.95
+            temp *= 0.98
             
         tentativas += 1
         

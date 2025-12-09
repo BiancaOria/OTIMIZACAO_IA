@@ -5,18 +5,15 @@ import statistics
 from GA_Caixeiro import GA  
 
 
-# 30 até 60
 NUM_PONTOS_MAX = 40 
-TAM_POPULACAO = 100 #
-MAX_GERACOES = 1000 #
+TAM_POPULACAO = 100 
+MAX_GERACOES = 1000 
 
 
 def carregar_dados():
     arquivo = 'CaixeiroGruposGA.csv'
     try:
         dados = np.loadtxt(arquivo, delimiter=',')
-        
-       
         if len(dados) > NUM_PONTOS_MAX:
             dados = dados[:NUM_PONTOS_MAX]
             
@@ -41,15 +38,12 @@ def plot_rota_3d(coordenadas, rota, custo, titulo_extra=""):
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    # Ordena pontos pela rota e fecha o ciclo
     xs = [coordenadas[i][0] for i in rota] + [coordenadas[rota[0]][0]]
     ys = [coordenadas[i][1] for i in rota] + [coordenadas[rota[0]][1]]
     zs = [coordenadas[i][2] for i in rota] + [coordenadas[rota[0]][2]]
 
-    # Plota pontos originais
     ax.scatter(coordenadas[:,0], coordenadas[:,1], coordenadas[:,2], c='#FE6EC3', s=30, label='Cidades')
     
-    # Rota
     ax.plot(xs, ys, zs, c='#74F4FE', linewidth=1.5, label='Rota')
     
     ax.set_title(f"Melhor Rota {titulo_extra} (Custo: {custo:.2f})")
@@ -57,7 +51,6 @@ def plot_rota_3d(coordenadas, rota, custo, titulo_extra=""):
     plt.legend()
     plt.show()
 
-# ANÁLISE 
 
 def realizar_comparacao_elitismo(coordenadas, n_rodadas=10):
     print(f"\n=== Iniciando Análise Comparativa - {n_rodadas} Rodadas ===")
@@ -66,7 +59,6 @@ def realizar_comparacao_elitismo(coordenadas, n_rodadas=10):
     geracoes_com_elitismo = []
     custos_sem_elitismo = []
 
-    # COM elitismo
     print(f"\n Executando COM Elitismo (Ne=2)...")
     for i in range(n_rodadas):
         ga = GA(coordenadas, TAM_POPULACAO, MAX_GERACOES, taxa_mutacao=0.01, elitismo=True)
@@ -75,7 +67,6 @@ def realizar_comparacao_elitismo(coordenadas, n_rodadas=10):
         geracoes_com_elitismo.append(geracao)
         print(f"   Rodada {i+1}: Convergiu na Geração {geracao} | Custo: {custo:.2f}")
 
-    # SEM elitismo
     print(f"\n Executando SEM Elitismo...")
     for i in range(n_rodadas):
         ga = GA(coordenadas, TAM_POPULACAO, MAX_GERACOES, taxa_mutacao=0.01, elitismo=False)
@@ -92,7 +83,6 @@ def realizar_comparacao_elitismo(coordenadas, n_rodadas=10):
     media_com = statistics.mean(custos_com_elitismo)
     media_sem = statistics.mean(custos_sem_elitismo)
     
-    #  Conclusoes 
     print("\n" + "="*50)
     print("RELATÓRIO FINAL")
     print("="*50)
@@ -107,13 +97,11 @@ def realizar_comparacao_elitismo(coordenadas, n_rodadas=10):
         print("\nCONCLUSÃO: O operador de Elitismo não apresentou ganho significativo.")
     print("="*50)
 
-# Main
 
 pontos_coordenadas = carregar_dados()
 
 realizar_comparacao_elitismo(pontos_coordenadas, n_rodadas=10)
 
-# Final COM ELITISMO
 print("\n>>> Gerando Gráficos da Melhor Solução (COM ELITISMO)...")
 ga_com = GA(
     coordenadas=pontos_coordenadas, 
@@ -128,7 +116,6 @@ print(f"Melhor Custo (Com Elitismo): {custo_com:.2f}")
 plot_convergencia(historico_com, titulo="Convergência do GA (Com Elitismo)")
 plot_rota_3d(pontos_coordenadas, rota_com, custo_com, titulo_extra="(Com Elitismo)")
 
-# Final SEM ELITISMO 
 
 print("\n>>> Gerando Gráficos da Solução (SEM ELITISMO) para comparação...")
 ga_sem = GA(

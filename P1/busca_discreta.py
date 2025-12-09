@@ -186,7 +186,7 @@ class LocalRandomSearch:
         plt.figure()
         plt.title(f"Convergência do LRS ({self.opt})")
         plt.plot(self.historico); plt.xlabel("Iterações"); plt.ylabel("f(x_best)"); plt.grid(); 
-        plt.show()
+        # plt.show()
         plt.close(self.fig)  # FECHA FIGURA 3D
         plt.close()          # FECHA FIGURA DO GRÁFICO
         return self.f_opt

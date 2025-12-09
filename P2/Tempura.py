@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patheffects as path_effects #
 
 class SimulatedAnnealingTempura:
-    def __init__(self, max_it, T_inicial, cooling_rate):
-        self.max_it = max_it
+    def __init__(self,T_inicial, cooling_rate):
         self.T = T_inicial
         self.cooling_rate = cooling_rate
         self.N = 8 
@@ -22,7 +21,7 @@ class SimulatedAnnealingTempura:
         if plt.fignum_exists(1): plt.close(1)
         self.fig = plt.figure(1, figsize=(6,6))
         self.ax = self.fig.subplots()
-        self.update_plot()
+        #self.update_plot()
 
     # --- Item 1: Projeto da Função f(x) (Custo) ---
     def calculate_attacks(self, board):
@@ -75,8 +74,8 @@ class SimulatedAnnealingTempura:
 
     def search(self):
         it = 0
-        # --- Item 5: Critério de Parada (Max iterações ou Custo Ótimo = 0) ---
-        while it < self.max_it and self.cost > 0:
+        
+        while self.cost > 0:
             
             # Gera vizinho
             new_board = self.perturb(self.board)
@@ -96,7 +95,7 @@ class SimulatedAnnealingTempura:
                     self.min_cost = self.cost
                     self.best_solution = np.copy(self.board)
 
-                self.update_plot()
+                #self.update_plot()
 
             self.historico.append(self.cost)
             
@@ -104,7 +103,7 @@ class SimulatedAnnealingTempura:
             self.T *= self.cooling_rate 
             it += 1
         
-        return self.best_solution, self.min_cost
+        return self.best_solution, self.min_cost, it
 
     def plot_convergence(self):
         if plt.fignum_exists(2): plt.close(2)

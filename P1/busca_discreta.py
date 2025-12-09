@@ -8,15 +8,12 @@ class GlobalRandomSearch:
         self.max_it = max_it
         self.opt = opt
         
-        # --- CORREÇÃO DE DIMENSIONALIDADE ---
         self.lim_inf = np.array(lim_inf)
         self.lim_sup = np.array(lim_sup)
         
         if self.lim_inf.ndim == 0: self.lim_inf = np.full(2, float(self.lim_inf))
         if self.lim_sup.ndim == 0: self.lim_sup = np.full(2, float(self.lim_sup))
-        # ------------------------------------
 
-        # size=2 removido pois lim_inf/sup já definem o shape (2,)
         self.x_opt = np.random.uniform(self.lim_inf, self.lim_sup)
         self.f_opt = self.target_func(self.x_opt)
         
@@ -102,13 +99,11 @@ class LocalRandomSearch:
         self.max_it = max_it
         self.opt = opt
         
-        # --- CORREÇÃO DE DIMENSIONALIDADE ---
         self.lim_inf = np.array(lim_inf)
         self.lim_sup = np.array(lim_sup)
         
         if self.lim_inf.ndim == 0: self.lim_inf = np.full(2, float(self.lim_inf))
         if self.lim_sup.ndim == 0: self.lim_sup = np.full(2, float(self.lim_sup))
-        # ------------------------------------
         
         if not (0 < self.sigma < 1):
             raise ValueError("O valor de sigma deve estar no intervalo (0, 1).")

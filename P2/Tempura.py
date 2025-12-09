@@ -8,28 +8,21 @@ class SimulatedAnnealingTempura:
         self.cooling_rate = cooling_rate
         self.N = 8 
         
-        # Estado inicial: permutação aleatória (garante 1 rainha por linha/coluna)
         self.board = np.random.permutation(self.N)
         
-        # Custo inicial (número de ataques)
         self.cost = self.calculate_attacks(self.board)
         self.historico = [self.cost]
         self.best_solution = np.copy(self.board)
         self.min_cost = self.cost
 
-        # Configuração da Figura
         if plt.fignum_exists(1): plt.close(1)
         self.fig = plt.figure(1, figsize=(6,6))
         self.ax = self.fig.subplots()
         #self.update_plot()
 
-    # --- Item 1: Projeto da Função f(x) (Custo) ---
     def calculate_attacks(self, board):
-        """
-        Calcula o número de pares de rainhas se atacando diagonalmente.
-        (Ataques lineares são impossíveis devido à representação por permutação)
-        """
-        h = 0 # número de ataques
+        
+        h = 0 
         n = len(board)
         for i in range(n):
             for j in range(i + 1, n):
@@ -39,12 +32,8 @@ class SimulatedAnnealingTempura:
                     h += 1
         return h
 
-    # --- Item 4: Função de Perturbação Controlada ---
     def perturb(self, current_board):
-        """
-        Troca duas rainhas de coluna aleatoriamente.
-        Mantém a restrição de 'uma por linha, uma por coluna'.
-        """
+        
         new_board = np.copy(current_board)
         i, j = np.random.choice(self.N, 2, replace=False)
         new_board[i], new_board[j] = new_board[j], new_board[i]
@@ -77,20 +66,16 @@ class SimulatedAnnealingTempura:
         
         while self.cost > 0:
             
-            # Gera vizinho
             new_board = self.perturb(self.board)
             new_cost = self.calculate_attacks(new_board)
             
             delta = new_cost - self.cost
 
-            # Critério de Aceitação (Metropolis)
-            # Se melhorou (delta < 0), aceita sempre.
-            # Se piorou, aceita com probabilidade e^(-delta/T)
+            
             if delta < 0 or np.random.uniform(0, 1) < np.exp(-delta / self.T):
                 self.board = new_board
                 self.cost = new_cost
                 
-                # Salva o melhor encontrado até agora
                 if self.cost < self.min_cost:
                     self.min_cost = self.cost
                     self.best_solution = np.copy(self.board)
@@ -99,7 +84,6 @@ class SimulatedAnnealingTempura:
 
             self.historico.append(self.cost)
             
-            # --- Item 3: Decaimento da Temperatura ---
             self.T *= self.cooling_rate 
             it += 1
         

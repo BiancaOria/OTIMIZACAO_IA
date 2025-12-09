@@ -8,13 +8,11 @@ class GlobalRandomSearch:
         self.max_it = max_it
         self.opt = opt
         
-        # --- CORREÇÃO DE DIMENSIONALIDADE ---
         self.lim_inf = np.array(lim_inf)
         self.lim_sup = np.array(lim_sup)
         
         if self.lim_inf.ndim == 0: self.lim_inf = np.full(2, float(self.lim_inf))
         if self.lim_sup.ndim == 0: self.lim_sup = np.full(2, float(self.lim_sup))
-        # ------------------------------------
 
         # size=2 removido pois lim_inf/sup já definem o shape (2,)
         self.x_opt = np.random.uniform(self.lim_inf, self.lim_sup)
@@ -23,7 +21,6 @@ class GlobalRandomSearch:
         self.path = [np.array([self.x_opt[0], self.x_opt[1], self.f_opt])]
         self.historico = [self.f_opt]
     
-        # ===== FIGURA =====
         self.fig = plt.figure(figsize=(8,6))
         self.ax = self.fig.add_subplot(111, projection='3d')
 
@@ -57,7 +54,6 @@ class GlobalRandomSearch:
         # plt.pause(0.05)
         
     def perturb(self):
-        # Usa os limites vetoriais
         x_cand = np.random.uniform(self.lim_inf, self.lim_sup)
         x_cand = np.clip(x_cand, self.lim_inf, self.lim_sup)
         return x_cand
@@ -102,13 +98,11 @@ class LocalRandomSearch:
         self.max_it = max_it
         self.opt = opt
         
-        # --- CORREÇÃO DE DIMENSIONALIDADE ---
         self.lim_inf = np.array(lim_inf)
         self.lim_sup = np.array(lim_sup)
         
         if self.lim_inf.ndim == 0: self.lim_inf = np.full(2, float(self.lim_inf))
         if self.lim_sup.ndim == 0: self.lim_sup = np.full(2, float(self.lim_sup))
-        # ------------------------------------
         
         if not (0 < self.sigma < 1):
             raise ValueError("O valor de sigma deve estar no intervalo (0, 1).")
@@ -119,7 +113,6 @@ class LocalRandomSearch:
         self.path = [np.array([self.x_opt[0], self.x_opt[1], self.f_opt])]
         self.historico = [self.f_opt]
         
-        # ===== FIGURA =====
         self.fig = plt.figure(figsize=(8,6))
         self.ax = self.fig.add_subplot(111, projection='3d')
 
@@ -153,7 +146,6 @@ class LocalRandomSearch:
         # plt.pause(0.05)
     
     def perturb(self):
-        # Usa o shape de x_opt para definir o tamanho do ruído
         noise = np.random.normal(loc=0, scale=self.sigma, size=self.x_opt.shape)
         x_cand = self.x_opt + noise
         x_cand = np.clip(x_cand, self.lim_inf, self.lim_sup)
